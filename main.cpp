@@ -2,7 +2,7 @@
 #include <iostream> 
 #include <ctime> //random number tools
 #include <cstdlib> //tokenizers and data type conversions
-#include <math>
+#include <cmath>
 using namespace std; //to ditch std:: prefixes
 void add_coordinate(Coordinate *list_end, float x, float y)
 {
@@ -13,7 +13,7 @@ void add_coordinate(Coordinate *list_end, float x, float y)
 	}
 	//end of list is passed in, so nodes need to be counted, summed, and incremented by 1 to find new ID. 
 	int count = 0; //counter var
-	for(Coordinate *moveto = list_end; moveto != nullptr; moveto->previous) //*moveto = list_end creates a pointer to the last node. while moveto points at a node AKA not a nullptr, it continues to move backwards using field previous.
+	for(Coordinate *moveto = list_end; moveto != nullptr; moveto = moveto->previous) //*moveto = list_end creates a pointer to the last node. while moveto points at a node AKA not a nullptr, it continues to move backwards using field previous.
 	{
 		count++; //end result plus 1 determines new ID. 
 	}
@@ -21,7 +21,7 @@ void add_coordinate(Coordinate *list_end, float x, float y)
 	Coordinate *node = new Coordinate; //making room for the new node aka coordinate pair
 	node->x = x; //x val
 	node->y = y; //y val
-	node->coord_id = length + 1;  
+	node->coord_id = count + 1;  
 	node->next = nullptr; //new final node
 	node->previous = list_end; //previous final node set as our initial start. each coord basically contains a two-sided record/position. pretty cool honestly. 
 	list_end->next = node; //
@@ -32,20 +32,20 @@ void forward_display(Coordinate *list_beginning)
 	cout << "Default list:\n";
 	for(Coordinate *moveto = list_beginning; moveto != nullptr; moveto = moveto->next)
 	{
-		cout << "ID " << moveto->coord_id << "Position: " << moveto->x << ", " << moveto->y << "\n";
+		cout << "ID " << moveto->coord_id << " Position: " << moveto->x << ", " << moveto->y << "\n";
 	}
 }
 //prints the list in reverse
 void backward_display(Coordinate *list_end)
 {
 	cout << "Backwards list:\n";
-	for(Coordinate *moveto = list_end; moveto != nullptr; moveto->previous)
+	for(Coordinate *moveto = list_end; moveto != nullptr; moveto = moveto->previous)
 	{
-		cout << "ID " << moveto->coord_id << "Position: " << moveto->x << ", " << moveto->y << "\n";
+		cout << "ID " << moveto->coord_id << " Position: " << moveto->x << ", " << moveto->y << "\n";
 	}
 }
 //node deletion time
-void delete_coordinate(Coordinate *list_beginning; int coord_id_to_delete)
+void delete_coordinate(Coordinate *list_beginning, int coord_id_to_delete)
 {
 	Coordinate *node = list_beginning;
 	while(node != nullptr && node->coord_id != coord_id_to_delete)
@@ -127,7 +127,7 @@ static float random_value() //we used rand in ECE131 to obtain random numbers. h
 {
 	return (float)rand() / RAND_MAX * 200.0f - 100.0f;
 }
-//move to the end and return the count. good for updating after deleting a node. 
+//move to the end and return the address. good for updating after deleting a node. 
 static Coordinate *get_end(Coordinate *list_beginning)
 {
 	Coordinate *moveto = list_beginning;
@@ -152,7 +152,7 @@ int main(int argc, char *argv[])
 {
 	if(argc != 2)
 	{
-		cout << "Incorrect usage. Use:\n" << argv[0] << "<number of coordinates>\n";
+		cout << "Incorrect usage. Use:\n" << argv[0] << " <number of coordinates>\n";
 		return 1;
 	}
 
@@ -181,15 +181,15 @@ int main(int argc, char *argv[])
 		list_end = list_end->next;
 	}
 
-	cout << "List size: " << list_length(list_beginning) << " entries./n";
+	cout << "List size: " << list_length(list_beginning) << " entries.\n";
 	forward_display(list_beginning);
 	backward_display(list_end);
 	
 	//deletions
 	int id_to_delete = (count >= 2) ? 2 : 1;
-	cout << " Deleting ID " << id_to_delete << "\n";
+	cout << "Deleting ID " << id_to_delete << "\n";
 	delete_coordinate(list_beginning, id_to_delete);
-	list_end = find_end(list_beginning);
+	list_end = get_end(list_beginning);
 
 	cout << "List size: " << list_length(list_beginning) << " entries.\n";
 	forward_display(list_beginning);
