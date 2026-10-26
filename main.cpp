@@ -2,7 +2,7 @@
 #include <iostream> 
 #include <ctime> //random number tools
 #include <cstdlib> //tokenizers and data type conversions
-#include <cmath>
+#include <cmath> //for sqrt, pow
 using namespace std; //to ditch std:: prefixes
 void add_coordinate(Coordinate *list_end, float x, float y) //returns nothing, takes pointer to last node and the new x/y pair to be added. 
 {
@@ -108,6 +108,8 @@ void closest_to(Coordinate *list_beginning, float x, float y)
 	Coordinate *closest = list_beginning; //set pointer to first address. 
 	float closest_node = sqrt(pow(closest->x - x, 2) + pow(closest->y - y, 2)); //distance formula essentially. 
 
+	float distbetween;
+
 	for(Coordinate *moveto = list_beginning->next; moveto != nullptr; moveto = moveto->next) //same increment loop
 	{
 		float deltax = moveto->x - x; //change in x
@@ -117,10 +119,11 @@ void closest_to(Coordinate *list_beginning, float x, float y)
 		{
 			closest_node = dist;
 			closest = moveto;
+			distbetween = dist;
 		}
 	}
 
-	cout << "Closest coord pair to " << x << ", " << y << " is: " << closest->x << ", " << closest->y << " ID: " << closest->coord_id << "\n";
+	cout << "Closest coord pair to " << x << ", " << y << " is: " << closest->x << ", " << closest->y << " ID: " << closest->coord_id << ", at " << distbetween << " units\n";
 }
 //main program
 static float random_value() //we used rand in ECE131 to obtain random numbers. here, rand returns a number which is divided by rand_max for scaling. multiplying by 200 and then subtracting forces the range from 0-200 to -100 -> +100. STATIC just isolates the function within main.cpp. 
