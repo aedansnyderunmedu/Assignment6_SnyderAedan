@@ -148,7 +148,7 @@ static void free_list(Coordinate *list_beginning)
 	}
 }
 //main starts here
-int main(int argc, char *argv[]) //same one we've used for the past 3 or 4 labs. argc is ./main, *argv[] is whatever number string we input.
+int main(int argc, char *argv[]) //same one we've used for the past 3 or 4 labs. argc looks for the right number of args, *argv[] is whatever string we input.
 {
 	if(argc != 2) //input rejection/error prints. 
 	{
@@ -206,7 +206,7 @@ int main(int argc, char *argv[]) //same one we've used for the past 3 or 4 labs.
 
 	//closest coord
 	cout << "\n";
-	closest_to(list_beginning->next, list_beginning->x, list_beginning->y); //we use the first node for a fixed arbitrary reference. could use anything. start at the 2nd node so the first note isn't compared to itself. you would need this offset for any node you picked, otherwise the function would choose the selected node itself. 
+	closest_to(list_beginning->next, list_beginning->x, list_beginning->y); //we use the first node for a fixed arbitrary reference. could use anything. start at the 2nd node so the first note isn't compared to itself. 
 
 	free_list(list_beginning); //starting at the very first node, free it all. 
 	return 0;
